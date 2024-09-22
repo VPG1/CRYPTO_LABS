@@ -32,3 +32,13 @@ func ConvertByteArrToUint32Arr(arr []byte) ([]uint32, error) {
 
 	return res, nil
 }
+
+func ConvertUint32ArrToByteArr(arr []uint32) []byte {
+	res := make([]byte, len(arr)*4)
+
+	for i := 0; i < len(arr); i++ {
+		binary.LittleEndian.PutUint32(res[i*4:(i+1)*4], arr[i])
+	}
+
+	return res
+}

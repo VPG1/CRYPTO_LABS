@@ -1,8 +1,8 @@
 package main
 
 import (
-	"LAB1/converters"
-	"LAB1/imitation_insert"
+	"CRYPTO_LABS/Lab1/imitation_insert"
+	"CRYPTO_LABS/converters"
 	"encoding/hex"
 	"fmt"
 	"strconv"

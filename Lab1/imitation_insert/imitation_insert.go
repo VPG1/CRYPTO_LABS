@@ -1,7 +1,7 @@
 package imitation_insert
 
 import (
-	"LAB1/converters"
+	"CRYPTO_LABS/converters"
 )
 
 var TABLE = [8][16]byte{

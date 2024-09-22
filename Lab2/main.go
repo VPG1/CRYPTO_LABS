@@ -5,6 +5,8 @@ import (
 	"crypto/rand"
 	"encoding/hex"
 	"fmt"
+	"log"
+	"os"
 )
 
 // key: 1f2e3f4f5f6f7f8f1f2e3f4f5f6f7f8f1f2e3f4f5f6f7f8f1f2e3f4f5f6f7f89
@@ -21,11 +23,13 @@ func generateRandomBytes(n int) []byte {
 }
 
 func main() {
-	fmt.Println("Enter data:")
-	var data string
-	_, err := fmt.Scanln(&data)
+	if len(os.Args) != 2 {
+		fmt.Println("Usage: go run CRYPTO_LABS <file>")
+	}
+
+	data, err := os.ReadFile(os.Args[1])
 	if err != nil {
-		fmt.Println(err)
+		log.Fatal(err)
 		return
 	}
 
@@ -33,7 +37,7 @@ func main() {
 	var keyStr string
 	_, err = fmt.Scanln(&keyStr)
 	if err != nil {
-		fmt.Println(err)
+		log.Fatal(err)
 		return
 	}
 
@@ -52,7 +56,7 @@ func main() {
 	var syncMessageHex string
 	_, err = fmt.Scanln(&syncMessageHex)
 	if err != nil {
-		fmt.Println(err)
+		log.Fatal(err)
 		return
 	}
 
@@ -67,13 +71,23 @@ func main() {
 		return
 	}
 
-	encryptData, err := cipher.CmEncrypt([]byte(data), key, syncMessage)
+	encryptData, err := cipher.CmEncrypt(data, key, syncMessage)
+	file, err := os.Create("data.txt")
+	if err != nil {
+		log.Fatal(err)
+		return
+	}
 
-	fmt.Println("Encrypted data:")
-	fmt.Println(string(encryptData))
+	defer func(file *os.File) {
+		err := file.Close()
+		if err != nil {
+			log.Fatal(err)
+		}
+	}(file)
 
-	decryptData, err := cipher.CmEncrypt(encryptData, key, syncMessage)
-
-	fmt.Println("Decrypted data:")
-	fmt.Println(string(decryptData))
+	_, err = file.Write(encryptData)
+	if err != nil {
+		log.Fatal(err)
+		return
+	}
 }

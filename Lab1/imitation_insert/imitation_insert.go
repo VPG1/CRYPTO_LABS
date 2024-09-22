@@ -1,7 +1,7 @@
 package imitation_insert
 
 import (
-	"ISM_LAB1/converters"
+	"LAB1/converters"
 )
 
 var TABLE = [8][16]byte{

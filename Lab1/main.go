@@ -1,8 +1,8 @@
 package main
 
 import (
-	"ISM_LAB1/converters"
-	"ISM_LAB1/imitation_insert"
+	"LAB1/converters"
+	"LAB1/imitation_insert"
 	"encoding/hex"
 	"fmt"
 	"strconv"

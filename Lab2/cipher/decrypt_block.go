@@ -1,11 +1,23 @@
 package cipher
 
-func DecryptBlock(block []uint32, key []uint32) []uint32 {
+import "CRYPTO_LABS/converters"
+
+func DecryptBlock(block []byte, key []byte) ([]byte, error) {
+	blockUint32, err := converters.ConvertByteArrToUint32Arr(block)
+	if err != nil {
+		return nil, err
+	}
+
+	keyUint32, err := converters.ConvertByteArrToUint32Arr(key)
+	if err != nil {
+		return nil, err
+	}
+
 	tactKeys := make([]uint32, 57)
 	for i := 1; i < len(tactKeys); i++ {
-		tactKeys[i] = key[(i-1)%8]
+		tactKeys[i] = keyUint32[(i-1)%8]
 	}
-	a, b, c, d := block[0], block[1], block[2], block[3]
+	a, b, c, d := blockUint32[0], blockUint32[1], blockUint32[2], blockUint32[3]
 
 	for i := 8; i >= 1; i-- {
 		b = b ^ MappingG(sum(a, tactKeys[7*i]), 5)                               // 1
@@ -22,7 +34,8 @@ func DecryptBlock(block []uint32, key []uint32) []uint32 {
 		a, d = d, a                                                              // 12
 	}
 
-	resBlock := make([]uint32, 4)
-	resBlock[0], resBlock[1], resBlock[2], resBlock[3] = c, a, d, b
-	return resBlock
+	resBlockUint32 := make([]uint32, 4)
+	resBlockUint32[0], resBlockUint32[1], resBlockUint32[2], resBlockUint32[3] = c, a, d, b
+
+	return converters.ConvertUint32ArrToByteArr(resBlockUint32), nil
 }
